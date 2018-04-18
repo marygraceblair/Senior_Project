@@ -11,7 +11,7 @@ import json
 def simple_upload(request):
     if request.method == 'POST':
         image = request.FILES['myfile']
-        scan(image)
+        practice.scan_receipt(image)
     return render(request, '../templates/import.html')
 
 # Create your views here.
