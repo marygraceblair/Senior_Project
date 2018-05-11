@@ -1,0 +1,27 @@
+{% block content %}
+
+<table>
+	    <thead>
+		<tr>
+		<td><p>Name</p></td>
+		<td><p>Amount</p></td>
+		<td><p>Price</p></td>
+		<td><p>Change</p></td>
+		</tr>
+		</thead>
+		{% for item in listitem %}
+			<tr class="datarow">
+				<td>{{item.food.name}}</td>
+				<td>{{item.amount}}</td>
+				<td>{{item.price}}</td>
+				<td>
+		              <form method="post">
+		           {% csrf_token %}
+				<input type="submit" name="item_id" value="{{item.id}}" />
+                </form>
+	         </td>
+              </td>
+        </tr>
+{% endfor %}
+</table>
+{% endblock %}

@@ -26,25 +26,11 @@ class ListItem(models.Model):
     food = models.ForeignKey(Food, on_delete = models.CASCADE)
     receipt = models.ForeignKey(Receipt, on_delete = models.CASCADE)
     price = models.FloatField( default=0)
-    amount = models.FloatField(default=1)
+    amount = models.FloatField(default=0)
 
 class Survey(models.Model):
     receipt = models.ManyToManyField(Receipt)
-    date = models.DateTimeField(default=datetime.now)
-    items = models.ManyToManyField(Food, through='ItemResults')
-    total_money_wasted = models.FloatField( default=0)
-    total_percent_wasted = models.FloatField( default=0)
-
-class ItemResults(models.Model):
-    food = models.ForeignKey(Food, on_delete= models.CASCADE)
-    price = models.FloatField( default=0)
-    amount_purchased = models.FloatField(default=1)
-    survey = models.ForeignKey(Survey, on_delete= models.CASCADE)
-    amount_consumed = models.FloatField( default=0)
-    amount_wasted = models.FloatField( default=0)
-    percent_wasted = models.FloatField( default=0)
-    money_wasted = models.FloatField( default=0)
-    money_spent = models.FloatField( default=0)
+    items = models.ManyToManyField(ListItem)
 
 
 ## Create your models here.

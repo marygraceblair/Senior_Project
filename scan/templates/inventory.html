@@ -1,0 +1,35 @@
+<table>
+	{% csrf_token %}
+	<tr>	
+	   <form action="" method="post">
+	  {% csrf_token %}
+		<td>{{form.item}}</td>
+		<td>{{form.quantity}}</td>
+		<td>{{form.needs_repairs}}</td>
+		<td> <input class="table_button" type="submit" value="Add inventory" /></td>
+	</form>
+	</td></tr>
+	    <thead>
+		<tr>
+		<td><p>Item?</p></td>
+		<td><p>Quantity</p></td>
+		<td><p>Needs Repairs</p></td>
+		<td><p>Change</p></td>
+		</tr>
+		</thead>
+		{% for item in inventory %}
+			<tr class="datarow">
+				<td>{{item.quantity}}</td>
+				<td>{{item.needs_repairs}}</td>
+				<td>
+				<td>
+		              <form action="/remove_items/" method="post">
+		           {% csrf_token %}
+				<input type="hidden" name="item_id" value="{{item.id}}" />
+			       <input type="submit" value="delete item">
+			</form>
+	         </td>
+              </td>
+        </tr>
+{% endfor %}
+</table>
