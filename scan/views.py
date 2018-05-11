@@ -49,7 +49,7 @@ def app_entry(request):
 def create_survey(request):
     receipt = Receipt.objects.latest('date')
     practice.make_survey(receipt)
-    return render(request, '../templates/index.html')
+    return render(request, '../templates/create.html')
 
 def take_survey(request):
     FoodFormSet = modelformset_factory(ItemResults, fields=('food', 'amount_purchased', 'amount_consumed', 'id'), exclude=['survey', 'price', 'amount_wasted', 'percent_wasted', 'money_wasted'] )
@@ -69,24 +69,33 @@ def take_survey(request):
             total_money_wasted = 0
             total_percent_wasted = 0 #MONEY
             #it's better to redo total stuff here
+            print('getting receipt items')
             for item in inventory:
                 total_cost += item.price
+            print('getting survey items')
             inventory_results = ItemResults.objects.filter(survey=survey)
             for item in inventory_results:
+                print('adding money_wasted')
                 total_money_wasted += item.money_wasted 
 
+            print('total money wasted' + str(total_money_wasted))
             survey.total_money_wasted = total_money_wasted
+            print('survey total money wasted' + str(survey.total_money_wasted))
             survey.save()
+            print('save1')
             survey.total_percent_wasted = total_money_wasted / total_cost 
+            print('survey total percent money wasted' + str(survey.total_percent_wasted))
             # i think one of the above will be a float
             #survey total percent wasted is MONEY
             survey.save()
+            print('save2')
             # item.delete()
             return redirect('delete')
             # do something.
     else:
-        formset = FoodFormSet()
-    return render(request, '../templates/add.html', {'formset': formset})
+        survey=Survey.objects.latest('date')
+        formset = FoodFormSet(queryset=ItemResults.objects.filter(survey=survey))
+    return render(request, '../templates/survey.html', {'formset': formset})
 
 def delete(request):
     if request.method == 'POST':
@@ -134,7 +143,8 @@ def add(request):
             return redirect('delete')
             # do something.
     else:
-        formset = ListItemFormSet()
+        receipt=Receipt.objects.latest('date')
+        formset = ListItemFormSet(queryset=ListItem.objects.filter(receipt=receipt))
     return render(request, '../templates/add.html', {'formset': formset})
 
 def additem(request):
